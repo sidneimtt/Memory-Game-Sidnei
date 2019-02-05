@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Matching Game</title>
     <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
@@ -13,31 +15,33 @@
 </head>
 <body>
 
-    <div class="container-2">
+<div class="container">
         <header>
-            <h2>Matching Game</h2>
+            <div>
+                <h2>Matching Game</h2>
+            </div>
         </header>
-
         <section class="score-panel">
-        	<ul class="stars">
-                <li>
-                    <i class="fa fa-star"></i>
-                </li>
-                <li>
-                    <i class="fa fa-star"></i>
-                </li>
-                <li>
-                    <i class="fa fa-star"></i>
-                </li>                   
-        	</ul>
-        	<span class="moves"></span> 
-            <span id="Moves"> MOVES </span> 
-            <div class="restart">
-        		<i class="fa fa-repeat" onclick="limpaLista()"></i>
-        	</div>
+        	   <ul class="stars">
+                    <li>
+                        <i class="fa fa-star"></i>
+                    </li>
+                    <li>
+                        <i class="fa fa-star"></i>
+                    </li>
+                    <li>
+                        <i class="fa fa-star"></i>
+                    </li>                   
+        	   </ul>
+        	   <span class="moves"></span>
+               <div class="restart">
+                    <span id="stopWatch"></span>         
+                    <i class="fa fa-repeat" onclick="limpaLista()"></i>
+        	   </div>
         </section>
 
 <!--Lista de Cartas -->
+    <section class="container">   
         <ul class="deck">
             <li id="deck1" class="card">
                 <i class="fa fa-diamond"></i>
@@ -88,12 +92,12 @@
                 <i class="fa fa-cube"></i>
             </li>
         </ul>
-
-    </div>
+    </section>
+</div>
 
 
 <!-- Modal Finaliza jogo -->
-<div class="container">
+<div class="container img-responsive">
     <div class="modal fade" id="game1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
