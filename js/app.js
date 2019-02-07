@@ -16,8 +16,27 @@ var matchCar = 0;
 var stars1 = 3;
 var endTime, startTime = new Date();
 var operationTook = 0;
-stopWatch();
+var tempVar = 0;
+var sec = 0;
+temporizador();
 limpaLista();
+
+
+//Quando o jogador começa o jogo, o temporizador  é inciado
+function temporizador() {
+	var sec = 0;
+	function pad ( val ) { return val > 9 ? val : "0" + val; }
+	tempVar  =  setInterval(myClock, 1000); 
+		function myClock() {
+        	$("#seconds").html(pad(++sec%60));
+        	$("#minutes").html(pad(parseInt(sec/60,10)));
+		}
+return;		
+}
+
+function stopTime( tem ) {
+	clearInterval(tem);
+}
 
 
 /*
@@ -52,8 +71,9 @@ function limpaLista() {
 	$('.card').removeClass("card match open show").addClass("card");
   	startTime = new Date();
   	$('.moves').html( "<em>" + moveCounter + "  MOVES  " +  "</em>" );
-	stopWatch();
-  	novaLista();
+  	stopTime(tempVar);
+  	temporizador();
+	novaLista();
 return;  	
 }
 
@@ -77,87 +97,14 @@ function novaLista() {
 return;		
 }
 
+
 	
 /*
-configurar o ouvinte de eventos para cada carta com base no Id. Se uma carta for clicada:
+configurar o ouvinte de eventos para cada carta com base no (evt). Se uma carta for clicada:
 */
-$("#deck1").on('click', function() {
-	valDeck = $("#deck1");
-	displayCard(valDeck);
-});
-
-$("#deck2").on('click', function() {
-	valDeck = $("#deck2");
-	displayCard(valDeck);
-});
-
-$("#deck3").on('click', function() {
-	valDeck = $("#deck3");
-	displayCard(valDeck);
-});
-
-$("#deck4").on('click', function() {
-	valDeck = $("#deck4");
-	displayCard(valDeck);
-});
-
-$("#deck5").on('click', function() {
-	valDeck = $("#deck5");
-	displayCard(valDeck);
-});
-
-$("#deck6").on('click', function() {
-	valDeck = $("#deck6");
-	displayCard(valDeck);
-});
-
-$("#deck7").on('click', function() {
-	valDeck = $("#deck7");
-	displayCard(valDeck);
-});
-
-$("#deck8").on('click', function() {
-	valDeck = $("#deck8");
-	displayCard(valDeck);
-});
-
-$("#deck9").on('click', function() {
-	valDeck = $("#deck9");
-	displayCard(valDeck);
-});
-
-$("#deck10").on('click', function() {
-	valDeck = $("#deck10");
-	displayCard(valDeck);
-});
-
-$("#deck11").on('click', function() {
-	valDeck = $("#deck11");
-	displayCard(valDeck);
-});
-
-$("#deck12").on('click', function() {
-	valDeck = $("#deck12");
-	displayCard(valDeck);
-});
-
-$("#deck13").on('click', function() {
-	valDeck = $("#deck13");
-	displayCard(valDeck);
-});
-
-$("#deck14").on('click', function() {
-	valDeck = $("#deck14");
-	displayCard(valDeck);
-});
-
-$("#deck15").on('click', function() {
-	valDeck = $("#deck15");
-	displayCard(valDeck);
-});
-
-$("#deck16").on('click', function() {
-	valDeck = $("#deck16");
+$(".card").on('click', function(evt) {
+	evt.preventDefault();
+	valDeck = $(evt.target);
 	displayCard(valDeck);
 });
 
@@ -174,14 +121,20 @@ function displayCard(valDe) {
 	if ( openCards.length === 2 ) {
         matchCards();		
 	} else if ( openCards.length === 3 ) { 
-			openCards[0].toggleClass('open show');
-      		openCards[1].toggleClass('open show');	
-      		openCards.shift();  // remove da lista
-      		openCards.shift();  
+			removeListaOpenCard();  
       		checkMoveCounter();
 	}
 return;
 }
+
+
+//remove da lista de open cards.
+function removeListaOpenCard() {
+			openCards[0].removeClass('open show');
+      		openCards[1].removeClass('open show');
+      		openCards.shift();  // remove da lista
+      		openCards.shift();
+}      		
 
 
 /*
@@ -190,20 +143,28 @@ return;
 function matchCards() {
 	var card1 = openCards[0].children().first();
 	var card2 = openCards[1].children().first();
-	var cla1 = card1[0].classList
-	var cla2 = card2[0].classList
-	if ( cla1[1] === cla2[1] ) {
-    	matchCar++;
-    	openCards[0].toggleClass('match open show');
+	var cardid1 = openCards[0];
+	var cardid2 = openCards[1];
+	var cla1 = card1[0].classList;
+	var cla2 = card2[0].classList;
+	var id1  = cardid1[0].id;
+	var id2  = cardid2[0].id; 
+	if ( id1 === id2 ) {
+			removeListaOpenCard();
+	} else if ( cla1[1] === cla2[1] ) {
+		matchCar++;
+		openCards[0].toggleClass('match open show');
     	openCards[1].toggleClass('match open show');
+    	$(openCards[0]).off(); // remove event listener
+    	$(openCards[1]).off();
     	checkMoveCounter();
-    } 
+    }
 return; 
 }
 
 
 /*
- Incrementar o contador de movimentos e exibi na página
+ Incrementar o contador de movimentos e exibir na página
  E verifica se todos os cartões combinam.    
  */
 function checkMoveCounter() {
@@ -214,6 +175,7 @@ function checkMoveCounter() {
 				endTime = new Date();
 				operationTook =  (endTime.getMinutes() - startTime.getMinutes());
 				scoreStar();
+				stopTime(tempVar);	
 				finaliza();
 		} else {
 		scoreStar();
@@ -252,26 +214,6 @@ function finaliza() {
   		return "<p class='fa fa-star fa-3x'>" + emphasis + "</p>";
 	});
 	$('div.modal-body').append("<h3> You took  " + operationTook + "  minutes to complete." + "</h3>");
-	$('#game1').modal('toggle'); 
+	$('#game1').modal({backdrop: 'static', keyboard: false});
 return;
-}
-
-
-// Apresenta relogio temporizador
-function stopWatch() {
-  var today = new Date();
-  var h = today.getHours();
-  var m = today.getMinutes();
-  var s = today.getSeconds();
-  m = checkTime(m);
-  s = checkTime(s);
-  $("#stopWatch").html( h + ":" + m + ":" + s );
-  var t = setTimeout(stopWatch, 500);
-}
-
-
-// Adiciona zero em frente para numero < 10 
-function checkTime(i) {
-  if (i < 10) {i = "0" + i};   
-    return i;
 }
