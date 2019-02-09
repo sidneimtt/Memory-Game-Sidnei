@@ -14,7 +14,7 @@ var valDeck;
 var moveCounter = 0;
 var matchCar = 0;
 var stars1 = 3;
-var endTime, startTime = new Date();
+var endTime, startTime;
 var operationTook = 0;
 var tempVar = 0;
 var sec = 0;
@@ -24,6 +24,7 @@ limpaLista();
 
 //Quando o jogador começa o jogo, o temporizador  é inciado
 function temporizador() {
+	startTime = new Date();
 	var sec = 0;
 	function pad ( val ) { return val > 9 ? val : "0" + val; }
 	tempVar  =  setInterval(myClock, 1000); 
@@ -69,11 +70,11 @@ function limpaLista() {
 	moveCounter = 0;
 	stars1 = 3
 	$('.card').removeClass("card match open show").addClass("card");
-  	startTime = new Date();
   	$('.moves').html( "<em>" + moveCounter + "  MOVES  " +  "</em>" );
   	stopTime(tempVar);
   	temporizador();
 	novaLista();
+	eventos();
 return;  	
 }
 
@@ -100,14 +101,14 @@ return;
 
 	
 /*
-configurar o ouvinte de eventos para cada carta com base no (evt). Se uma carta for clicada:
+Função configurar o ouvinte de eventos para cada carta com base no (evt). Se uma carta for clicada:
 */
+function eventos() {
 $(".card").on('click', function(evt) {
-	evt.preventDefault();
 	valDeck = $(evt.target);
 	displayCard(valDeck);
 });
-
+}
 
  /*
  ( Função displayCard ) Função call back do ouvinte de eventos se a carta for clicada.
@@ -116,15 +117,17 @@ $(".card").on('click', function(evt) {
  Quando 3 cartas na lista, remove da lista 2 cartas ( index 0 e 1), esconde o simbolo da carta.
  */
 function displayCard(valDe) {
-   	valDe.addClass('open show');
-   	openCards.push(valDe);  // adinciona no fim da lista 
-	if ( openCards.length === 2 ) {
-        matchCards();		
-	} else if ( openCards.length === 3 ) { 
-			removeListaOpenCard();  
-      		checkMoveCounter();
+	var clB = valDe[0].classList;
+	if ( clB.length === 1 ) {
+   				valDe.addClass('open show');
+   				openCards.push(valDe);  // adinciona no fim da lista 
+				if ( openCards.length === 2 ) {
+        			matchCards();		
+				} else if ( openCards.length === 3 ) { 
+					removeListaOpenCard();  
+      				checkMoveCounter();
+				}
 	}
-return;
 }
 
 
